@@ -1,0 +1,63 @@
+﻿@model VendorVM
+
+@{
+	ViewData["Title"] = "My Profile";
+}
+
+<div class="container mt-4">
+	<div class="text-center mb-4">
+		<img src="@Model.DisplayImageUrl" alt="Vendor Image"
+			 class="rounded-circle shadow-sm mb-3"
+			 style="width:200px; height:200px; object-fit:cover;" />
+		<h2 class="fw-bold"><i class="bi bi-shop"></i> @Model.Vendor.StoreName</h2>
+	</div>
+
+	<div class="card shadow-sm">
+		<div class="card-body">
+			<dl class="row">
+				<dt class="col-sm-4"><i class="bi bi-person"></i> Owner Full Name</dt>
+				<dd class="col-sm-8">@Model.Vendor.OwnerFullName</dd>
+
+				<dt class="col-sm-4"><i class="bi bi-envelope"></i> Email</dt>
+				<dd class="col-sm-8">@Model.AppUserEmail</dd>
+
+				<dt class="col-sm-4"><i class="bi bi-telephone"></i> Phone Number</dt>
+				<dd class="col-sm-8">@Model.Vendor.PhoneNumber</dd>
+
+				<dt class="col-sm-4"><i class="bi bi-geo-alt"></i> Store Address</dt>
+				<dd class="col-sm-8">@Model.Vendor.StoreAddress</dd>
+
+				<dt class="col-sm-4"><i class="bi bi-card-text"></i> Store Description</dt>
+				<dd class="col-sm-8">@Model.Vendor.StoreDescription</dd>
+
+				<dt class="col-sm-4">
+					<i class="bi bi-clock-history"></i> Account Created On
+				</dt>
+				<dd class="col-sm-8">
+					@Model.Vendor.CreatedAt.ToString("yyyy-MM-dd HH:mm")
+				</dd>
+			</dl>
+		</div>
+
+		<div class="card-footer text-end">
+			<form asp-area="Identity" asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+				@Html.AntiForgeryToken()
+				<button type="submit" class="btn btn-primary">
+					<i class="bi bi-box-arrow-right"></i> Logout
+				</button>
+			</form>
+			<a asp-area="Vendor" asp-controller="Profile" asp-action="EditProfile"
+			   class="btn btn-warning">
+				<i class="bi bi-pencil-square"></i> Edit Profile
+			</a>
+			<a asp-area="Vendor" asp-controller="Profile" asp-action="ChangeAccountPassword"
+			   class="btn btn-primary me-2">
+				<i class="bi bi-key"></i> Change Password
+			</a>
+			<a asp-area="Vendor" asp-controller="Profile" asp-action="DeleteAccount"
+			   class="btn btn-danger">
+				<i class="bi bi-trash"></i> Delete Profile
+			</a>
+		</div>
+	</div>
+</div>

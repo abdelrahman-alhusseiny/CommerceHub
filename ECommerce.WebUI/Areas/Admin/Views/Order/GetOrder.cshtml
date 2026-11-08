@@ -1,0 +1,160 @@
+﻿@model OrderHeaderVM
+
+@{
+	ViewData["Title"] = "Order Details";
+}
+
+<h2>Order Details</h2>
+
+<div class="card mb-4">
+	<div class="card-header">
+		<strong>Order Information</strong>
+	</div>
+	<div class="card-body">
+		<dl class="row">
+			<dt class="col-sm-3">Order ID</dt>
+			<dd class="col-sm-9">@Model.OrderHeader.Id</dd>
+
+			<dt class="col-sm-3">Customer Name</dt>
+			<dd class="col-sm-9">@Model.OrderHeader.FullName</dd>
+
+			<dt class="col-sm-3">Email</dt>
+			<dd class="col-sm-9">@Model.OrderHeader.Email</dd>
+
+			<dt class="col-sm-3">Phone</dt>
+			<dd class="col-sm-9">@Model.OrderHeader.PhoneNumber</dd>
+
+			<dt class="col-sm-3">Subtotal</dt>
+			<dd class="col-sm-9">@Model.DisplaySubtotalCost</dd>
+
+			<dt class="col-sm-3">Shipping</dt>
+			<dd class="col-sm-9">@Model.DisplayShippingCost</dd>
+
+			<dt class="col-sm-3">Total</dt>
+			<dd class="col-sm-9">@Model.DisplayTotalCost</dd>
+
+			<dt class="col-sm-3">Order Date</dt>
+			<dd class="col-sm-9">@Model.OrderHeader.OrderDate</dd>
+
+			@if (Model.OrderHeader.OrderStatus == SD.OrderStatus_Shipped)
+			{
+				<dt class="col-sm-3">Shipping Date</dt>
+				<dd class="col-sm-9">@Model.OrderHeader.ShippingDate</dd>
+			}
+
+			<dt class="col-sm-3">Order Status</dt>
+			<dd class="col-sm-9">@Model.OrderHeader.OrderStatus</dd>
+
+			<dt class="col-sm-3">Payment Status</dt>
+			<dd class="col-sm-9">@Model.OrderHeader.PaymentStatus</dd>
+
+			<dt class="col-sm-3">Shipping Address</dt>
+			<dd class="col-sm-9">
+				@Model.OrderHeader.StreetAddress1 <br />
+				@Model.OrderHeader.StreetAddress2 <br />
+				@Model.OrderHeader.City, @Model.OrderHeader.State <br />
+				@Model.OrderHeader.PostalCode, @Model.OrderHeader.Country
+			</dd>
+
+			@if (Model.OrderHeader.OrderStatus == SD.OrderStatus_Shipped)
+			{
+				<dt class="col-sm-3">Tracking Number</dt>
+				<dd class="col-sm-9">@Model.OrderHeader.TrackingNumber</dd>
+
+				<dt class="col-sm-3">Carrier</dt>
+				<dd class="col-sm-9">@Model.OrderHeader.Carrier</dd>
+			}
+		</dl>
+	</div>
+</div>
+
+<div class="card">
+	<div class="card-header">
+		<strong>Order Items</strong>
+	</div>
+	<div class="card-body">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Product</th>
+					<th>Unit Price</th>
+					<th>Quantity</th>
+					<th>Line Total</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model.OrderItems)
+				{
+					<tr>
+						<td>@item.ProductName</td>
+						<td>@item.DisplayUnitPrice</td>
+						<td>@item.OrderItem.Quantity</td>
+						<td>@item.DisplayTotalPrice</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div class="mt-3">
+	<form asp-area="Admin" asp-controller="Order" method="post">
+		@Html.AntiForgeryToken()
+
+		<input type="hidden" asp-for="OrderHeader.Id" />
+		<input type="hidden" asp-for="SearchString" />
+		<input type="hidden" asp-for="OrderStatus" />
+		<input type="hidden" asp-for="CurrentSort" />
+		<input type="hidden" asp-for="CurrentPage" />
+
+		@if (Model.OrderHeader.OrderStatus == SD.OrderStatus_InProcess)
+		{
+			<div class="form-group mb-2">
+				<label asp-for="OrderHeader.TrackingNumber"></label>
+				<input asp-for="OrderHeader.TrackingNumber" class="form-control" />
+				<span asp-validation-for="OrderHeader.TrackingNumber" class="text-danger"></span>
+			</div>
+
+			<div class="form-group mb-2">
+				<label asp-for="OrderHeader.Carrier"></label>
+				<input asp-for="OrderHeader.Carrier" class="form-control" />
+				<span asp-validation-for="OrderHeader.Carrier" class="text-danger"></span>
+			</div>
+
+			<hr />
+		}
+
+		<div class="d-flex gap-2 mt-2">
+			@if (Model.OrderHeader.OrderStatus == SD.OrderStatus_Approved)
+			{
+				<button type="submit" asp-action="StartProcessing" class="btn btn-primary">
+					<i class="bi bi-play-circle"></i> Start Processing
+				</button>
+			}
+
+			@if (Model.OrderHeader.OrderStatus == SD.OrderStatus_InProcess)
+			{
+				<button type="submit" asp-action="ShipOrder" class="btn btn-success">
+					<i class="bi bi-truck"></i> Ship Order
+				</button>
+			}
+
+			@if (Model.OrderHeader.OrderStatus == SD.OrderStatus_Approved
+						|| Model.OrderHeader.OrderStatus == SD.OrderStatus_InProcess)
+			{
+				<button type="submit" asp-action="CancelOrder" class="btn btn-danger">
+					<i class="bi bi-x-circle"></i> Cancel Order
+				</button>
+			}
+
+			<a asp-area="Admin" asp-controller="Order" asp-action="GetAllOrders"
+			   asp-route-searchString="@Model.SearchString"
+			   asp-route-orderStatus="@Model.OrderStatus"
+			   asp-route-currentSort="@Model.CurrentSort"
+			   asp-route-currentPage="@Model.CurrentPage"
+			   class="btn btn-secondary">
+				<i class="bi bi-arrow-left-circle"></i> Back to Orders
+			</a>
+		</div>
+	</form>
+</div>

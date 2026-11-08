@@ -1,0 +1,132 @@
+﻿@model ProductVM
+
+@{
+	ViewData["Title"] = "Product Details";
+}
+
+<div class="container py-4">
+	<div class="card shadow-lg p-4">
+
+		<h2 class="mb-3">@Model.Product.Name</h2>
+
+		<div class="d-flex flex-wrap gap-3 mb-3">
+			@foreach (var imgUrl in Model.ProductImageUrls)
+			{
+				<img src="@imgUrl"
+					 alt="Product Image"
+					 class="rounded border"
+					 style="width:200px;height:200px;object-fit:cover;" />
+			}
+		</div>
+
+		<p class="mb-3">
+			<span class="fw-bold text-success">@Model.DisplayPrice</span><br />
+			<span class="text-muted text-decoration-line-through">@Model.DisplayOldPrice</span>
+		</p>
+
+		<dl class="row mb-4">
+			<dt class="col-sm-3">Description</dt>
+			<dd class="col-sm-9">@Model.Product.Description</dd>
+
+			<dt class="col-sm-3">Stock Quantity</dt>
+			<dd class="col-sm-9">@Model.Product.Quantity</dd>
+
+			<dt class="col-sm-3">Created At</dt>
+			<dd class="col-sm-9">@Model.Product.CreatedAt.ToString("yyyy-MM-dd")</dd>
+		</dl>
+
+		<h4 class="mt-4">Category Information</h4>
+		<dl class="row mb-4">
+			<dt class="col-sm-3">Category</dt>
+			<dd class="col-sm-9">@Model.CategoryName</dd>
+
+			<dt class="col-sm-3">Description</dt>
+			<dd class="col-sm-9">@Model.CategoryDescription</dd>
+		</dl>
+
+		<h4 class="mt-4">Vendor Information</h4>
+		<dl class="row mb-4">
+			<dd class="col-sm-12 mb-3">
+				<img src="@Model.VendorImageUrl"
+					 alt="@Model.VendorStoreName"
+					 class="rounded border"
+					 style="width:120px;height:120px;object-fit:cover;" />
+			</dd>
+
+			<dt class="col-sm-3">Store Name</dt>
+			<dd class="col-sm-9">@Model.VendorStoreName</dd>
+
+			<dt class="col-sm-3">Description</dt>
+			<dd class="col-sm-9">@Model.VendorStoreDescription</dd>
+
+			<dt class="col-sm-3">Phone</dt>
+			<dd class="col-sm-9">@Model.VendorPhoneNumber</dd>
+
+			<dt class="col-sm-3">Address</dt>
+			<dd class="col-sm-9">@Model.VendorStoreAddress</dd>
+		</dl>
+
+
+		<div class="mt-4 d-flex gap-2">
+			<a asp-area="Customer" asp-controller="Shop" asp-action="GetAllProducts"
+			   asp-route-searchString="@Model.SearchString"
+			   asp-route-categoryId="@Model.CategoryId"
+			   asp-route-currentSort="@Model.CurrentSort"
+			   asp-route-currentPage="@Model.CurrentPage"
+			   class="btn btn-secondary">
+				<i class="bi bi-arrow-left"></i> Back to Products
+			</a>
+
+			@if (Model.IsInWishlist)
+			{
+				<form asp-area="Customer" asp-controller="Shop" asp-action="ToggleWishlist" method="post">
+					@Html.AntiForgeryToken()
+					<input type="hidden" name="Product.Id" value="@Model.Product.Id" />
+					<input type="hidden" name="SearchString" value="@Model.SearchString" />
+					<input type="hidden" name="CategoryId" value="@Model.CategoryId" />
+					<input type="hidden" name="CurrentSort" value="@Model.CurrentSort" />
+					<input type="hidden" name="CurrentPage" value="@Model.CurrentPage" />
+					<button type="submit" class="btn btn-danger">
+						<i class="bi bi-heart-fill"></i> Wishlisted
+					</button>
+				</form>
+			}
+			else
+			{
+				<form asp-area="Customer" asp-controller="Shop" asp-action="ToggleWishlist" method="post">
+					@Html.AntiForgeryToken()
+					<input type="hidden" name="Product.Id" value="@Model.Product.Id" />
+					<input type="hidden" name="SearchString" value="@Model.SearchString" />
+					<input type="hidden" name="CategoryId" value="@Model.CategoryId" />
+					<input type="hidden" name="CurrentSort" value="@Model.CurrentSort" />
+					<input type="hidden" name="CurrentPage" value="@Model.CurrentPage" />
+					<button type="submit" class="btn btn-outline-danger">
+						<i class="bi bi-heart"></i> Add to Wishlist
+					</button>
+				</form>
+			}
+
+			@if (Model.IsInCart)
+			{
+				<a asp-area="Customer" asp-controller="Cart" asp-action="CheckoutOrder"
+				   class="btn btn-success">
+					<i class="bi bi-cart"></i> Go to Cart
+				</a>
+			}
+			else
+			{
+				<form asp-area="Customer" asp-controller="Shop" asp-action="AddToCart" method="post">
+					@Html.AntiForgeryToken()
+					<input type="hidden" name="Product.Id" value="@Model.Product.Id" />
+					<input type="hidden" name="SearchString" value="@Model.SearchString" />
+					<input type="hidden" name="CategoryId" value="@Model.CategoryId" />
+					<input type="hidden" name="CurrentSort" value="@Model.CurrentSort" />
+					<input type="hidden" name="CurrentPage" value="@Model.CurrentPage" />
+					<button type="submit" class="btn btn-primary">
+						<i class="bi bi-cart-plus"></i> Add to Cart
+					</button>
+				</form>
+			}
+		</div>
+	</div>
+</div>

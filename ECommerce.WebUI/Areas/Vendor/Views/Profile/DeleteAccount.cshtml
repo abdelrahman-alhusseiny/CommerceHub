@@ -1,0 +1,68 @@
+﻿@model VendorVM
+
+@{
+	ViewData["Title"] = "Delete Account";
+}
+
+<div class="container mt-4">
+	<h2 class="mb-4 text-danger">
+		<i class="bi bi-exclamation-triangle-fill"></i> Delete Account
+	</h2>
+
+	<div class="alert alert-danger text-center">
+		<i class="bi bi-x-circle-fill"></i>
+		<strong>Are you sure?</strong> Deleting your account is permanent and cannot be
+		undone.
+	</div>
+
+	<div class="text-center mb-4">
+		<img src="@Model.DisplayImageUrl" alt="Vendor Image"
+			 class="rounded-circle shadow-sm"
+			 style="width:200px; height:200px; object-fit:cover;" />
+	</div>
+
+	<div class="row mb-4">
+		<div class="col-md-8 offset-md-2">
+			<dl class="row">
+				<dt class="col-sm-4"><i class="bi bi-shop"></i> Store Name</dt>
+				<dd class="col-sm-8">@Model.Vendor.StoreName</dd>
+
+				<dt class="col-sm-4"><i class="bi bi-person"></i> Owner Full Name</dt>
+				<dd class="col-sm-8">@Model.Vendor.OwnerFullName</dd>
+
+				<dt class="col-sm-4"><i class="bi bi-envelope"></i> Email</dt>
+				<dd class="col-sm-8">@Model.AppUserEmail</dd>
+
+				<dt class="col-sm-4"><i class="bi bi-telephone"></i> Phone Number</dt>
+				<dd class="col-sm-8">@Model.Vendor.PhoneNumber</dd>
+
+				<dt class="col-sm-4"><i class="bi bi-geo-alt"></i> Store Address</dt>
+				<dd class="col-sm-8">@Model.Vendor.StoreAddress</dd>
+
+				<dt class="col-sm-4"><i class="bi bi-card-text"></i> Store Description</dt>
+				<dd class="col-sm-8">@Model.Vendor.StoreDescription</dd>
+
+				<dt class="col-sm-4">
+					<i class="bi bi-clock-history"></i> Account Created On
+				</dt>
+				<dd class="col-sm-8">
+					@Model.Vendor.CreatedAt.ToString("yyyy-MM-dd HH:mm")
+				</dd>
+			</dl>
+		</div>
+	</div>
+
+	<form asp-area="Vendor" asp-controller="Profile" asp-action="DeleteAccount" method="post"
+		  class="d-flex justify-content-end gap-2">
+		@Html.AntiForgeryToken()
+		<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+		<button type="submit" class="btn btn-danger">
+			<i class="bi bi-trash-fill"></i> Confirm Delete
+		</button>
+		<a asp-area="Vendor" asp-controller="Profile" asp-action="GetProfile"
+		   class="btn btn-secondary">
+			<i class="bi bi-arrow-left-circle"></i> Cancel
+		</a>
+	</form>
+</div>

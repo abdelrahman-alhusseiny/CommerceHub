@@ -1,0 +1,187 @@
+﻿<header>
+	<nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
+		<div class="container-fluid">
+			<a class="navbar-brand" asp-area="" asp-controller="Home"
+			   asp-action="Index">
+				ECommerce
+			</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+					data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+					aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="navbar-collapse collapse d-sm-inline-flex
+			   justify-content-between">
+
+				<ul class="navbar-nav flex-grow-1">
+					@if (!User.Identity.IsAuthenticated)
+					{
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Home"
+							   asp-action="Index">
+								<i class="bi bi-house"></i> Home
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Home"
+							   asp-action="Privacy">
+								<i class="bi bi-shield"></i> Privacy
+							</a>
+						</li>
+					}
+
+					@if (User.IsInRole(SD.Role_Admin) ||
+										User.IsInRole(SD.Role_SuperAdmin))
+					{
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="Admin"
+							   asp-controller="Dashboard" asp-action="Index">
+								<i class="bi bi-speedometer2"></i> Dashboard
+							</a>
+						</li>
+						@if (User.IsInRole(SD.Role_SuperAdmin))
+						{
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-area="Admin"
+								   asp-controller="Admin" asp-action="GetAllAdmins">
+									<i class="bi bi-shield-lock"></i> Admins
+								</a>
+							</li>
+						}
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="Admin"
+							   asp-controller="Customer" asp-action="GetAllCustomers">
+								<i class="bi bi-people"></i> Customers
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="Admin"
+							   asp-controller="Vendor" asp-action="GetAllVendors">
+								<i class="bi bi-shop"></i> Vendors
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="Admin"
+							   asp-controller="Category" asp-action="GetAllCategories">
+								<i class="bi bi-list-ul"></i> Categories
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="Admin"
+							   asp-controller="Product" asp-action="GetAllProducts">
+								<i class="bi bi-box-seam"></i> Products
+							</a>
+						</li>
+						
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="Admin"
+							   asp-controller="Order" asp-action="GetAllOrders">
+								<i class="bi bi-cart-check"></i> Orders
+							</a>
+						</li>
+					}
+
+					@if (User.IsInRole(SD.Role_Customer))
+					{
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="Customer"
+							   asp-controller="Profile" asp-action="GetProfile">
+								<i class="bi bi-person-circle"></i> Profile
+							</a>
+						</li>
+
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="Customer"
+							   asp-controller="Shop" asp-action="GetAllProducts">
+								<i class="bi bi-shop"></i> Shop
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="Customer"
+							   asp-controller="Wishlist" asp-action="GetAllWishlistItems">
+								<i class="bi bi-heart"></i> Wishlist
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="Customer"
+							   asp-controller="Cart" asp-action="CheckoutOrder">
+								<i class="bi bi-cart"></i> Cart	@await Component.InvokeAsync("CartCount")
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="Customer"
+							   asp-controller="Order" asp-action="GetAllOrders">
+								<i class="bi bi-box"></i> My Orders
+							</a>
+						</li>
+					}
+
+					@if (User.IsInRole(SD.Role_Vendor))
+					{
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="Vendor"
+							   asp-controller="Dashboard" asp-action="Index">
+								<i class="bi bi-speedometer"></i> Dashboard
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="Vendor"
+							   asp-controller="Profile" asp-action="GetProfile">
+								<i class="bi bi-shop"></i> Profile
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="Vendor"
+							   asp-controller="Product" asp-action="GetAllProducts">
+								<i class="bi bi-box-seam"></i> Products
+							</a>
+						</li>
+					}
+				</ul>
+
+				<ul class="navbar-nav ms-auto align-items-center">
+					@if (!User.Identity.IsAuthenticated)
+					{
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="Identity"
+							   asp-controller="Account" asp-action="ChooseRole">
+								<i class="bi bi-person-plus"></i> Register
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="Identity"
+							   asp-controller="Account" asp-action="Login">
+								<i class="bi bi-box-arrow-in-right"></i> Login
+							</a>
+						</li>
+					}
+
+					@* @if (User.IsInRole(SD.Role_Customer))
+					{
+						
+					}
+
+					@if (User.IsInRole(SD.Role_Vendor))
+					{
+						
+					}
+ *@
+					@if (User.Identity.IsAuthenticated)
+					{
+						<li class="nav-item">
+							<form asp-area="Identity" asp-controller="Account"
+								  asp-action="Logout" method="post" class="d-inline">
+								@Html.AntiForgeryToken()
+								<button type="submit" class="nav-link btn btn-link
+									   text-dark p-0">
+									<i class="bi bi-box-arrow-right"></i> Logout
+								</button>
+							</form>
+						</li>
+					}
+				</ul>
+			</div>
+		</div>
+	</nav>
+</header>

@@ -1,0 +1,200 @@
+﻿@model CategoryListVM
+
+@{
+	ViewData["Title"] = "Category List";
+}
+
+<div class="container py-4">
+	<div class="d-flex justify-content-between align-items-center mb-3">
+		<h2>
+			<i class="bi bi-people"></i> Category List
+		</h2>
+		<a asp-area="Admin" asp-controller="Category" asp-action="CreateCategory"
+		   asp-route-searchString="@Model.SearchString"
+		   asp-route-currentSort="@Model.CurrentSort"
+		   asp-route-currentPage="@Model.CurrentPage"
+		   class="btn btn-primary">
+			<i class="bi bi-plus-circle"></i> Create Category
+		</a>
+	</div>
+
+	<form asp-area="Admin" asp-controller="Category" asp-action="GetAllCategories" method="get"
+		  class="row g-2 mb-3">
+		<input type="hidden" name="currentSort" value="@Model.CurrentSort" />
+		<input type="hidden" name="currentPage" value="1" />
+
+		<div class="col-md-4">
+			<input type="text"
+				   name="searchString"
+				   value="@Model.SearchString"
+				   class="form-control"
+				   placeholder="Search categories..." />
+		</div>
+
+		<div class="col-md-2 d-flex">
+			<a asp-area="Admin" asp-controller="Category" asp-action="GetAllCategories"
+			   class="btn btn-outline-secondary">
+				<i class="bi bi-arrow-counterclockwise"></i> Reset
+			</a>
+		</div>
+	</form>
+
+	<div class="mb-3">
+		<span class="me-2 fw-bold">Sort by:</span>
+		<a asp-area="Admin" asp-controller="Category" asp-action="GetAllCategories"
+		   asp-route-currentSort="@Model.NameSort"
+		   asp-route-searchString="@Model.SearchString"
+		   asp-route-currentPage="@Model.CurrentPage"
+		   class="btn btn-sm btn-outline-secondary me-1">
+			Name
+			@if (Model.CurrentSort == "name")
+			{
+				<i class="bi bi-caret-up-fill"></i>
+			}
+			else if (Model.CurrentSort == "name_desc")
+			{
+				<i class="bi bi-caret-down-fill"></i>
+			}
+		</a>
+
+		<a asp-area="Admin" asp-controller="Category" asp-action="GetAllCategories"
+		   asp-route-currentSort="@Model.CreatedAtSort"
+		   asp-route-searchString="@Model.SearchString"
+		   asp-route-currentPage="@Model.CurrentPage"
+		   class="btn btn-sm btn-outline-secondary">
+			Created At
+			@if (Model.CurrentSort == "created")
+			{
+				<i class="bi bi-caret-up-fill"></i>
+			}
+			else if (Model.CurrentSort == "created_desc")
+			{
+				<i class="bi bi-caret-down-fill"></i>
+			}
+		</a>
+	</div>
+
+	@if (!Model.Categories.Any())
+	{
+		<div class="alert alert-warning">
+			<i class="bi bi-exclamation-triangle"></i> No categories available.
+		</div>
+	}
+	else
+	{
+		<div class="table-responsive">
+			<table class="table table-hover table-bordered align-middle">
+				<thead class="table-dark">
+					<tr>
+						<th><i class="bi bi-image"></i> Image</th>
+						<th><i class="bi bi-tag"></i> Name</th>
+						<th><i class="bi bi-clock-history"></i> Created At</th>
+						<th><i class="bi bi-gear"></i> Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var item in Model.Categories)
+					{
+						<tr>
+							<td>
+								<img src="@item.DisplayImageUrl"
+									 alt="Category Image"
+									 style="width:80px; height:70px; object-fit:cover;" />
+							</td>
+							<td>@item.Category.Name</td>
+							<td>@item.Category.CreatedAt.ToString("yyyy-MM-dd")</td>
+							<td>
+								<a asp-area="Admin" asp-controller="Category"
+								   asp-action="GetCategory" asp-route-id="@item.Category.Id"
+								   asp-route-searchString="@Model.SearchString"
+								   asp-route-currentSort="@Model.CurrentSort"
+								   asp-route-currentPage="@Model.CurrentPage"
+								   class="btn btn-sm btn-info me-1">
+									<i class="bi bi-eye"></i> Details
+								</a>
+								<a asp-area="Admin" asp-controller="Category"
+								   asp-action="EditCategory" asp-route-id="@item.Category.Id"
+								   asp-route-sourceView="@Model.SourceView"
+								   asp-route-searchString="@Model.SearchString"
+								   asp-route-currentSort="@Model.CurrentSort"
+								   asp-route-currentPage="@Model.CurrentPage"
+								   class="btn btn-sm btn-warning me-1">
+									<i class="bi bi-eye"></i> Edit
+								</a>
+								<a asp-area="Admin" asp-controller="Category"
+								   asp-action="DeleteCategory" asp-route-id="@item.Category.Id"
+								   asp-route-sourceView="@Model.SourceView"
+								   asp-route-searchString="@Model.SearchString"
+								   asp-route-currentSort="@Model.CurrentSort"
+								   asp-route-currentPage="@Model.CurrentPage"
+								   class="btn btn-sm btn-danger me-1">
+									<i class="bi bi-eye"></i> Delete
+								</a>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+
+		<nav aria-label="Page navigation">
+			<ul class="pagination justify-content-between">
+				@if (Model.CurrentPage > 1)
+				{
+					<li class="page-item">
+						<a asp-area="Admin" asp-controller="Category" asp-action="GetAllCategories"
+						   asp-route-currentPage="@(Model.CurrentPage - 1)"
+						   asp-route-searchString="@Model.SearchString"
+						   asp-route-currentSort="@Model.CurrentSort"
+						   class="page-link">
+							Previous
+						</a>
+					</li>
+				}
+				else
+				{
+					<li class="page-item disabled">
+						<span class="page-link">Previous</span>
+					</li>
+				}
+
+				<li class="page-item flex-grow-1 d-flex justify-content-center">
+					<ul class="pagination mb-0">
+						@for (int i = 1; i <= Model.TotalPages; i++)
+						{
+							<li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+								<a asp-area="Admin" asp-controller="Category"
+								   asp-action="GetAllCategories"
+								   asp-route-currentPage="@i"
+								   asp-route-searchString="@Model.SearchString"
+								   asp-route-currentSort="@Model.CurrentSort"
+								   class="page-link">
+									@i
+								</a>
+							</li>
+						}
+					</ul>
+				</li>
+
+				@if (Model.CurrentPage < Model.TotalPages)
+				{
+					<li class="page-item">
+						<a asp-area="Admin" asp-controller="Category" asp-action="GetAllCategories"
+						   asp-route-currentPage="@(Model.CurrentPage + 1)"
+						   asp-route-searchString="@Model.SearchString"
+						   asp-route-currentSort="@Model.CurrentSort"
+						   class="page-link">
+							Next
+						</a>
+					</li>
+				}
+				else
+				{
+					<li class="page-item disabled">
+						<span class="page-link">Next</span>
+					</li>
+				}
+			</ul>
+		</nav>
+	}
+</div>

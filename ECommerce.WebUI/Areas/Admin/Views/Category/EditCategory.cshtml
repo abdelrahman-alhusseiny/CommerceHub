@@ -1,0 +1,93 @@
+﻿@model CategoryVM
+
+@{
+    ViewData["Title"] = "Edit Category";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4"><i class="bi bi-pencil-square"></i> Edit Category</h2>
+
+    <form asp-area="Admin" asp-controller="Category" asp-action="EditCategory" method="post"
+          enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <!-- Hidden fields -->
+        <input asp-for="Category.Id" type="hidden" />
+        <input asp-for="Category.ImageUrl" type="hidden" />
+
+        <input asp-for="DisplayImageUrl" type="hidden" />
+        <input asp-for="HasCustomImage" type="hidden" />
+
+        <input asp-for="SourceView" type="hidden" />
+        <input asp-for="SearchString" type="hidden" />
+        <input asp-for="CurrentSort" type="hidden" />
+        <input asp-for="CurrentPage" type="hidden" />
+
+        <div class="row">
+            <!-- Image Section -->
+            <div class="col-md-5">
+                <div class="mb-3">
+                    <img src="@Model.DisplayImageUrl" alt="Category Image"
+                         class="img-fluid shadow-sm mb-3"
+                         style="max-height:250px; width:100%; object-fit:cover;" />
+
+                    @if (Model.HasCustomImage)
+                    {
+                        <button type="submit" asp-area="Admin" asp-controller="Category"
+                                asp-action="DeleteCategoryImage" class="btn btn-outline-danger btn-sm">
+                            <i class="bi bi-trash"></i> Remove Image
+                        </button>
+                    }
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Category.ImageFile" class="form-label">
+                        <i class="bi bi-upload"></i> Upload New Image
+                    </label>
+                    <input asp-for="Category.ImageFile" type="file" class="form-control" />
+                    <span asp-validation-for="Category.ImageFile" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-- Category Details -->
+            <div class="col-md-7">
+                <div class="mb-3">
+                    <label asp-for="Category.Name" class="form-label">
+                        <i class="bi bi-tag"></i> Name
+                    </label>
+                    <input asp-for="Category.Name" class="form-control" />
+                    <span asp-validation-for="Category.Name" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Category.Description" class="form-label">
+                        <i class="bi bi-info-circle"></i> Description
+                    </label>
+                    <textarea asp-for="Category.Description" class="form-control" rows="4"></textarea>
+                    <span asp-validation-for="Category.Description" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Buttons -->
+        <div class="mt-4 text-end">
+            <button type="submit" class="btn btn-success me-2">
+                <i class="bi bi-check-circle"></i> Save Changes
+            </button>
+            <a asp-area="Admin" asp-controller="Category" asp-action="@Model.SourceView"
+               asp-route-id="@Model.Category.Id"
+               asp-route-searchString="@Model.SearchString"
+               asp-route-currentSort="@Model.CurrentSort"
+               asp-route-currentPage="@Model.CurrentPage"
+               class="btn btn-secondary">
+                <i class="bi bi-arrow-left-circle"></i> Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

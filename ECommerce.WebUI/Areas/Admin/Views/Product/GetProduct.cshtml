@@ -1,0 +1,87 @@
+﻿@model ProductVM
+
+@{
+	ViewData["Title"] = "Product Details";
+}
+
+<div class="container py-4">
+	<h2 class="mb-4">
+		<i class="bi bi-info-circle"></i> Product Details
+	</h2>
+
+	<div class="card shadow-sm">
+		<div class="card-body">
+			<dl class="row">
+				<dt class="col-sm-3"><i class="bi bi-image"></i> Product Images</dt>
+				<dd class="col-sm-9">
+					<div class="d-flex flex-wrap gap-3">
+						@foreach (var img in Model.ProductImageUrls)
+						{
+							<img src="@img" alt="Product Image"
+								 class="img-thumbnail"
+								 style="width:150px; height:auto;" />
+						}
+					</div>
+				</dd>
+
+				<dt class="col-sm-3"><i class="bi bi-tag"></i> Name</dt>
+				<dd class="col-sm-9">@Model.Product.Name</dd>
+
+				<dt class="col-sm-3"><i class="bi bi-card-text"></i> Description</dt>
+				<dd class="col-sm-9">@Model.Product.Description</dd>
+
+				<dt class="col-sm-3"><i class="bi bi-book"></i> ISBN</dt>
+				<dd class="col-sm-9">@Model.Product.ISBN</dd>
+
+				<dt class="col-sm-3"><i class="bi bi-currency-dollar"></i> Price</dt>
+				<dd class="col-sm-9">@Model.DisplayPrice</dd>
+
+				<dt class="col-sm-3"><i class="bi bi-currency-exchange"></i> Old Price</dt>
+				<dd class="col-sm-9">@Model.DisplayOldPrice</dd>
+
+				<dt class="col-sm-3"><i class="bi bi-box-seam"></i> Quantity</dt>
+				<dd class="col-sm-9">@Model.Product.Quantity</dd>
+
+				<dt class="col-sm-3"><i class="bi bi-list"></i> Category</dt>
+				<dd class="col-sm-9">@Model.CategoryName</dd>
+
+				<dt class="col-sm-3"><i class="bi bi-shop"></i> Store Name</dt>
+				<dd class="col-sm-9">@Model.VendorStoreName</dd>
+
+				<dt class="col-sm-3"><i class="bi bi-clock-history"></i> Created On</dt>
+				<dd class="col-sm-9">@Model.Product.CreatedAt.ToString("yyyy-MM-dd HH:mm")</dd>
+			</dl>
+		</div>
+	</div>
+
+	<div class="mt-4">
+		<a asp-area="Admin" asp-controller="Product" asp-action="GetAllProducts"
+		   asp-route-searchString="@Model.SearchString"
+		   asp-route-categoryId="@Model.CategoryId"
+		   asp-route-currentSort="@Model.CurrentSort"
+		   asp-route-currentPage="@Model.CurrentPage"
+		   class="btn btn-secondary me-2">
+			<i class="bi bi-arrow-left-circle"></i> Back to List
+		</a>
+		<a asp-area="Admin" asp-controller="Product" asp-action="EditProduct"
+		   asp-route-id="@Model.Product.Id"
+		   asp-route-sourceView="@Model.SourceView"
+		   asp-route-searchString="@Model.SearchString"
+		   asp-route-categoryId="@Model.CategoryId"
+		   asp-route-currentSort="@Model.CurrentSort"
+		   asp-route-currentPage="@Model.CurrentPage"
+		   class="btn btn-warning me-2">
+			<i class="bi bi-pencil-square"></i> Edit
+		</a>
+		<a asp-area="Admin" asp-controller="Product" asp-action="DeleteProduct"
+		   asp-route-id="@Model.Product.Id"
+		   asp-route-sourceView="@Model.SourceView"
+		   asp-route-searchString="@Model.SearchString"
+		   asp-route-categoryId="@Model.CategoryId"
+		   asp-route-currentSort="@Model.CurrentSort"
+		   asp-route-currentPage="@Model.CurrentPage"
+		   class="btn btn-danger">
+			<i class="bi bi-trash"></i> Delete
+		</a>
+	</div>
+</div>

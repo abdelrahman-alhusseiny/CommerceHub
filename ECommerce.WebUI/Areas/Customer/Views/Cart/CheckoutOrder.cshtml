@@ -1,0 +1,119 @@
+﻿@model CartListVM
+
+@{
+	ViewData["Title"] = "Review Order";
+}
+
+<div class="container py-4" style="max-width: 960px;">
+	<h2 class="mb-4 fw-bold">Checkout Your Order</h2>
+
+	<div class="card shadow-sm mb-4">
+		<div class="card-header bg-dark text-white fw-semibold">
+			Your Cart Items
+		</div>
+		<div class="card-body">
+			@if (!Model.CartItems.Any())
+			{
+				<div class="alert alert-warning">
+					<i class="bi bi-exclamation-triangle"></i> Your cart is empty.
+				</div>
+			}
+			else
+			{
+				<table class="table table-hover table-bordered align-middle">
+					<thead class="table-dark">
+						<tr>
+							<th><i class="bi bi-image"></i> Image</th>
+							<th><i class="bi bi-tag"></i> Product</th>
+							<th><i class="bi bi-list"></i> Category</th>
+							<th><i class="bi bi-currency-dollar"></i> Price</th>
+							<th><i class="bi bi-box-seam"></i> Quantity</th>
+							<th><i class="bi bi-gear"></i> Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var item in Model.CartItems)
+						{
+							<tr>
+								<td>
+									<img src="@item.ProductImageUrl" alt="@item.ProductName" width="80" height="80" class="img-thumbnail" />
+								</td>
+								<td>@item.ProductName</td>
+								<td>@item.ProductCategoryName</td>
+								<td>@item.ProductUnitPrice</td>
+								<td>
+									@item.CartItem.Quantity
+									<span class="text-muted">/ @item.ProductQuantity</span>
+								</td>
+								<td>
+									<form asp-area="Customer" asp-controller="Cart" asp-action="IncreaseItem" method="post" class="d-inline">
+										<input type="hidden" name="cartItemId" value="@item.CartItem.Id" />
+										<button type="submit" class="btn btn-sm btn-success">
+											<i class="bi bi-plus"></i>
+										</button>
+									</form>
+
+									<form asp-area="Customer" asp-controller="Cart" asp-action="DecreaseItem" method="post" class="d-inline">
+										<input type="hidden" name="cartItemId" value="@item.CartItem.Id" />
+										<button type="submit" class="btn btn-sm btn-warning">
+											<i class="bi bi-dash"></i>
+										</button>
+									</form>
+
+									<form asp-area="Customer" asp-controller="Cart" asp-action="RemoveItem" method="post" class="d-inline">
+										<input type="hidden" name="cartItemId" value="@item.CartItem.Id" />
+										<button type="submit" class="btn btn-sm btn-danger">
+											<i class="bi bi-trash"></i>
+										</button>
+									</form>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			}
+		</div>
+	</div>
+
+	@if (Model.CartItems.Any())
+	{
+		<form asp-action="SubmitOrder" method="post">
+			@Html.AntiForgeryToken()
+			<div class="card mb-4 shadow-sm">
+				<div class="card-header bg-dark text-white fw-semibold">
+					Order Summary
+				</div>
+				<div class="card-body">
+					<ul class="list-group list-group-flush">
+						@foreach (var item in Model.CartItems)
+						{
+							<li class="list-group-item d-flex justify-content-between align-items-center">
+								<span>@item.ProductName * @item.CartItem.Quantity</span>
+								<span class="fw-bold">@item.ProductTotalPrice</span>
+							</li>
+						}
+						<li class="list-group-item d-flex justify-content-between align-items-center bg-light">
+							<span class="fw-bold fs-5">Cart Total</span>
+							<span class="fw-bold fs-5 text-success">@Model.OrderTotalPrice</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="row mt-3">
+				<div class="col-md-6">
+					<a asp-area="Customer" asp-controller="Shop" asp-action="GetAllProducts" class="btn btn-outline-secondary w-100">
+						<i class="bi bi-arrow-left-circle"></i> Back to Shopping
+					</a>
+				</div>
+				<div class="col-md-6">
+					<button type="submit" class="btn btn-success w-100">
+						<i class="bi bi-check-circle"></i> Confirm Order
+					</button>
+				</div>
+			</div>
+		</form>
+	}
+</div>
+
+

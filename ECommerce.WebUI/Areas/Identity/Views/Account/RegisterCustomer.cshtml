@@ -1,0 +1,106 @@
+﻿@model RegisterCustomerVM
+
+@{
+	ViewData["Title"] = "Register as Customer";
+}
+
+<div class="container py-4">
+	<h2 class="mb-4">
+		<i class="bi bi-person-plus"></i> Register as Customer
+	</h2>
+
+	<form asp-area="Identity" asp-controller="Account" asp-action="RegisterCustomer"
+		  method="post" enctype="multipart/form-data" class="card shadow-sm p-4">
+		@Html.AntiForgeryToken()
+
+		<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+		<div class="mb-3">
+			<label asp-for="Customer.FullName" class="form-label">
+				<i class="bi bi-person"></i> Full Name
+			</label>
+			<input asp-for="Customer.FullName" class="form-control" />
+			<span asp-validation-for="Customer.FullName" class="text-danger"></span>
+		</div>
+
+		<div class="mb-3">
+			<label asp-for="Email" class="form-label">
+				<i class="bi bi-envelope"></i> Email
+			</label>
+			<input asp-for="Email" class="form-control" />
+			<span asp-validation-for="Email" class="text-danger"></span>
+		</div>
+
+		<div class="mb-3">
+			<label asp-for="Customer.PhoneNumber" class="form-label">
+				<i class="bi bi-telephone"></i> Phone Number
+			</label>
+			<input asp-for="Customer.PhoneNumber" class="form-control" />
+			<span asp-validation-for="Customer.PhoneNumber" class="text-danger"></span>
+		</div>
+
+		<div class="mb-3">
+			<label asp-for="Customer.Address" class="form-label">
+				<i class="bi bi-geo-alt"></i> Address
+			</label>
+			<input asp-for="Customer.Address" class="form-control" />
+			<span asp-validation-for="Customer.Address" class="text-danger"></span>
+		</div>
+
+		<div class="mb-3">
+			<label asp-for="Customer.Gender" class="form-label">
+				<i class="bi bi-gender-ambiguous"></i> Gender
+			</label>
+			<select asp-for="Customer.Gender" asp-items="Model.GenderList" class="form-select">
+				<option value="">-- Select Gender --</option>
+			</select>
+			<span asp-validation-for="Customer.Gender" class="text-danger"></span>
+		</div>
+
+		<div class="mb-3">
+			<label asp-for="Customer.DateOfBirth" class="form-label">
+				<i class="bi bi-calendar"></i> Date of Birth
+			</label>
+			<input asp-for="Customer.DateOfBirth" type="date" class="form-control" />
+			<span asp-validation-for="Customer.DateOfBirth" class="text-danger"></span>
+		</div>
+
+		<div class="mb-3">
+			<label asp-for="Customer.ImageFile" class="form-label">
+				<i class="bi bi-image"></i> Profile Image (Optional)
+			</label>
+			<input asp-for="Customer.ImageFile" type="file" class="form-control"
+				   accept="image/*" />
+			<span asp-validation-for="Customer.ImageFile" class="text-danger"></span>
+		</div>
+
+		<div class="mb-3">
+			<label asp-for="Password" class="form-label">
+				<i class="bi bi-lock"></i> Password
+			</label>
+			<input asp-for="Password" class="form-control" />
+			<span asp-validation-for="Password" class="text-danger"></span>
+		</div>
+
+		<div class="mb-3">
+			<label asp-for="ConfirmPassword" class="form-label">
+				<i class="bi bi-lock-fill"></i> Confirm Password
+			</label>
+			<input asp-for="ConfirmPassword" class="form-control" />
+			<span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+		</div>
+
+		<div class="d-flex justify-content-between mt-4">
+			<button type="submit" class="btn btn-success">
+				<i class="bi bi-check-circle"></i> Register
+			</button>
+			<a asp-area="Identity" asp-controller="Account" asp-action="Login" class="btn btn-secondary">
+				<i class="bi bi-arrow-left-circle"></i> Back to Login
+			</a>
+		</div>
+	</form>
+</div>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}

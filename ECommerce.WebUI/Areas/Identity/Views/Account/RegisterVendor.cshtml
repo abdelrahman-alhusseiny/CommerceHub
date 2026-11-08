@@ -1,0 +1,106 @@
+﻿@model RegisterVendorVM
+
+@{
+	ViewData["Title"] = "Register as Vendor";
+}
+
+<div class="container py-4">
+	<h2 class="mb-4">
+		<i class="bi bi-person-plus"></i> Register as Vendor
+	</h2>
+
+	<form asp-area="Identity" asp-controller="Account" asp-action="RegisterVendor"
+		  method="post" enctype="multipart/form-data" class="card shadow-sm p-4">
+		@Html.AntiForgeryToken()
+
+		<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+		<div class="mb-3">
+			<label asp-for="Vendor.StoreName" class="form-label">
+				<i class="bi bi-shop"></i> Store Name
+			</label>
+			<input asp-for="Vendor.StoreName" class="form-control" />
+			<span asp-validation-for="Vendor.StoreName" class="text-danger"></span>
+		</div>
+
+		<div class="mb-3">
+			<label asp-for="Vendor.OwnerFullName" class="form-label">
+				<i class="bi bi-person"></i> Owner Full Name
+			</label>
+			<input asp-for="Vendor.OwnerFullName" class="form-control" />
+			<span asp-validation-for="Vendor.OwnerFullName" class="text-danger"></span>
+		</div>
+
+		<div class="mb-3">
+			<label asp-for="Email" class="form-label">
+				<i class="bi bi-envelope"></i> Email
+			</label>
+			<input asp-for="Email" class="form-control" />
+			<span asp-validation-for="Email" class="text-danger"></span>
+		</div>
+
+		<div class="mb-3">
+			<label asp-for="Vendor.PhoneNumber" class="form-label">
+				<i class="bi bi-telephone"></i> Phone Number
+			</label>
+			<input asp-for="Vendor.PhoneNumber" class="form-control" />
+			<span asp-validation-for="Vendor.PhoneNumber" class="text-danger"></span>
+		</div>
+
+		<div class="mb-3">
+			<label asp-for="Vendor.StoreAddress" class="form-label">
+				<i class="bi bi-geo-alt"></i> Store Address
+			</label>
+			<input asp-for="Vendor.StoreAddress" class="form-control" />
+			<span asp-validation-for="Vendor.StoreAddress" class="text-danger"></span>
+		</div>
+
+		<div class="mb-3">
+			<label asp-for="Vendor.StoreDescription" class="form-label">
+				<i class="bi bi-card-text"></i> Store Description
+			</label>
+			<textarea asp-for="Vendor.StoreDescription" class="form-control"></textarea>
+			<span asp-validation-for="Vendor.StoreDescription" class="text-danger">
+			</span>
+		</div>
+
+		<div class="mb-3">
+			<label asp-for="Vendor.ImageFile" class="form-label">
+				<i class="bi bi-image"></i> Store Logo (Optional)
+			</label>
+			<input asp-for="Vendor.ImageFile" type="file" class="form-control"
+				   accept="image/*" />
+			<span asp-validation-for="Vendor.ImageFile" class="text-danger"></span>
+		</div>
+
+		<div class="mb-3">
+			<label asp-for="Password" class="form-label">
+				<i class="bi bi-lock"></i> Password
+			</label>
+			<input asp-for="Password" class="form-control" />
+			<span asp-validation-for="Password" class="text-danger"></span>
+		</div>
+
+		<div class="mb-3">
+			<label asp-for="ConfirmPassword" class="form-label">
+				<i class="bi bi-lock-fill"></i> Confirm Password
+			</label>
+			<input asp-for="ConfirmPassword" class="form-control" />
+			<span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+		</div>
+
+		<div class="d-flex justify-content-between mt-4">
+			<button type="submit" class="btn btn-success">
+				<i class="bi bi-check-circle"></i> Register
+			</button>
+			<a asp-area="Identity" asp-controller="Account" asp-action="Login"
+			   class="btn btn-secondary">
+				<i class="bi bi-arrow-left-circle"></i> Back to Login
+			</a>
+		</div>
+	</form>
+</div>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}

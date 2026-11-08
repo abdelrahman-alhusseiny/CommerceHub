@@ -1,0 +1,65 @@
+﻿@model CustomerVM
+
+@{
+	ViewData["Title"] = "My Profile";
+}
+
+<div class="container mt-4">
+	<div class="text-center mb-4">
+		<img src="@Model.DisplayImageUrl" alt="Profile Image"
+			 class="rounded-circle shadow-sm mb-3"
+			 style="width:200px; height:200px; object-fit:cover;" />
+		<h2 class="fw-bold">
+			<i class="bi bi-person-circle"></i> @Model.Customer.FullName
+		</h2>
+	</div>
+
+	<div class="card shadow-sm">
+		<div class="card-body">
+			<dl class="row">
+				<dt class="col-sm-4"><i class="bi bi-envelope"></i> Email</dt>
+				<dd class="col-sm-8">@Model.AppUserEmail</dd>
+
+				<dt class="col-sm-4"><i class="bi bi-telephone"></i> Phone Number</dt>
+				<dd class="col-sm-8">@Model.Customer.PhoneNumber</dd>
+
+				<dt class="col-sm-4"><i class="bi bi-geo-alt"></i> Address</dt>
+				<dd class="col-sm-8">@Model.Customer.Address</dd>
+
+				<dt class="col-sm-4"><i class="bi bi-gender-ambiguous"></i> Gender</dt>
+				<dd class="col-sm-8">@Model.Customer.Gender</dd>
+
+				<dt class="col-sm-4"><i class="bi bi-calendar"></i> Date of Birth</dt>
+				<dd class="col-sm-8">@Model.Customer.DateOfBirth.ToString("yyyy-MM-dd")</dd>
+
+				<dt class="col-sm-4">
+					<i class="bi bi-clock-history"></i> Account Created On
+				</dt>
+				<dd class="col-sm-8">
+					@Model.Customer.CreatedAt.ToString("yyyy-MM-dd HH:mm")
+				</dd>
+			</dl>
+		</div>
+
+		<div class="card-footer text-end">
+			<form asp-area="Identity" asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+				@Html.AntiForgeryToken()
+				<button type="submit" class="btn btn-primary">
+					<i class="bi bi-box-arrow-right"></i> Logout
+				</button>
+			</form>
+			<a asp-area="Customer" asp-controller="Profile" asp-action="EditProfile"
+			   class="btn btn-warning">
+				<i class="bi bi-pencil-square"></i> Edit Profile
+			</a>
+			<a asp-area="Customer" asp-controller="Profile" asp-action="ChangeAccountPassword"
+			   class="btn btn-primary me-2">
+				<i class="bi bi-key"></i> Change Password
+			</a>
+			<a asp-area="Customer" asp-controller="Profile" asp-action="DeleteAccount"
+			   class="btn btn-danger">
+				<i class="bi bi-trash"></i> Delete Account
+			</a>
+		</div>
+	</div>
+</div>

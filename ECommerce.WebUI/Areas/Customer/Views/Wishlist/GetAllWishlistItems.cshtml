@@ -1,0 +1,62 @@
+﻿@model WishlistListVM
+
+@{
+    ViewData["Title"] = "My Wishlist";
+}
+
+<div class="container py-4">
+    <h2 class="fw-bold mb-4">My Wishlist</h2>
+
+    @if (!Model.WishlistItems.Any())
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-heart"></i> Your wishlist is empty.
+        </div>
+    }
+    else
+    {
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">Image</th>
+                    <th scope="col">Product</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Unit Price</th>
+                    <th scope="col">Available Qty</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.WishlistItems)
+                {
+                    <tr>
+                        <td>
+                            <img src="@item.ProductImageUrl" alt="@item.ProductName"
+                                 class="img-thumbnail" style="width:80px;height:auto;" />
+                        </td>
+                        <td>@item.ProductName</td>
+                        <td>@item.ProductCategoryName</td>
+                        <td>@item.ProductUnitPrice</td>
+                        <td>@item.ProductQuantity</td>
+                        <td>
+                            <form asp-area="Customer" asp-controller="Wishlist" asp-action="RemoveFromWishlist" method="post" class="d-inline">
+                                <input type="hidden" name="wishlistItemId" value="@item.WishlistItem.Id" />
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    @Html.AntiForgeryToken()
+                                    <i class="bi bi-trash"></i> Remove
+                                </button>
+                            </form>
+                            <form asp-area="Customer" asp-controller="Wishlist" asp-action="AddToCart" method="post" class="d-inline">
+                                <input type="hidden" name="wishlistItemId" value="@item.WishlistItem.Id" />
+                                <button type="submit" class="btn btn-sm btn-success">
+                                    @Html.AntiForgeryToken()
+                                    <i class="bi bi-cart-plus"></i> Add to Cart
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

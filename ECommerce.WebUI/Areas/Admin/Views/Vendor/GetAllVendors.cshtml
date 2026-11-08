@@ -1,0 +1,233 @@
+﻿@model VendorListVM
+
+@{
+	ViewData["Title"] = "Vendor List";
+}
+
+<div class="container py-4">
+	<div class="d-flex justify-content-between align-items-center mb-3">
+		<h2>
+			<i class="bi bi-people"></i> Vendor List
+		</h2>
+		<a asp-area="Admin" asp-controller="Vendor" asp-action="RegisterVendor"
+		   asp-route-searchString="@Model.SearchString"
+		   asp-route-lockoutStatus="@Model.LockoutStatus"
+		   asp-route-currentSort="@Model.CurrentSort"
+		   asp-route-currentPage="@Model.CurrentPage"
+		   class="btn btn-primary">
+			<i class="bi bi-plus-circle"></i> Register New Vendor
+		</a>
+	</div>
+
+	<form asp-area="Admin" asp-controller="Vendor" asp-action="GetAllVendors" method="get"
+		  class="row g-2 mb-3">
+		<input type="hidden" name="currentSort" value="@Model.CurrentSort" />
+		<input type="hidden" name="currentPage" value="1" />
+
+		<div class="col-md-4">
+			<input type="text"
+				   name="searchString"
+				   value="@Model.SearchString"
+				   class="form-control"
+				   placeholder="Search vendors..." />
+		</div>
+
+		<div class="col-md-3">
+			<select name="lockoutStatus"
+					asp-items="Model.LockoutStatusList"
+					class="form-select"
+					onchange="this.form.submit()">
+				<option value="">All Accounts</option>
+			</select>
+		</div>
+
+		<div class="col-md-2 d-flex">
+			<a asp-area="Admin" asp-controller="Vendor" asp-action="GetAllVendors"
+			   class="btn btn-outline-secondary">
+				<i class="bi bi-arrow-counterclockwise"></i> Reset
+			</a>
+		</div>
+	</form>
+
+	<div class="mb-3">
+		<span class="me-2 fw-bold">Sort by:</span>
+		<a asp-area="Admin" asp-controller="Vendor" asp-action="GetAllVendors"
+		   asp-route-currentSort="@Model.NameSort"
+		   asp-route-searchString="@Model.SearchString"
+		   asp-route-lockoutStatus="@Model.LockoutStatus"
+		   asp-route-currentPage="@Model.CurrentPage"
+		   class="btn btn-sm btn-outline-secondary me-1">
+			Name
+			@if (Model.CurrentSort == "name")
+			{
+				<i class="bi bi-caret-up-fill"></i>
+			}
+			else if (Model.CurrentSort == "name_desc")
+			{
+				<i class="bi bi-caret-down-fill"></i>
+			}
+		</a>
+
+		<a asp-area="Admin" asp-controller="Vendor" asp-action="GetAllVendors"
+		   asp-route-currentSort="@Model.CreatedAtSort"
+		   asp-route-searchString="@Model.SearchString"
+		   asp-route-lockoutStatus="@Model.LockoutStatus"
+		   asp-route-currentPage="@Model.CurrentPage"
+		   class="btn btn-sm btn-outline-secondary">
+			Created At
+			@if (Model.CurrentSort == "created")
+			{
+				<i class="bi bi-caret-up-fill"></i>
+			}
+			else if (Model.CurrentSort == "created_desc")
+			{
+				<i class="bi bi-caret-down-fill"></i>
+			}
+		</a>
+	</div>
+
+	@if (!Model.Vendors.Any())
+	{
+		<div class="alert alert-warning">
+			<i class="bi bi-exclamation-triangle"></i> No vendors available.
+		</div>
+	}
+	else
+	{
+		<div class="table-responsive">
+			<table class="table table-hover table-bordered align-middle">
+				<thead class="table-dark">
+					<tr>
+						<th><i class="bi bi-image"></i> Image</th>
+						<th><i class="bi bi-shop"></i> Store Name</th>
+						<th><i class="bi bi-envelope"></i> Email</th>
+						<th><i class="bi bi-lock"></i> Lockout Status</th>
+						<th><i class="bi bi-clock-history"></i> Created At</th>
+						<th><i class="bi bi-gear"></i> Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var item in Model.Vendors)
+					{
+						<tr>
+							<td>
+								<img src="@item.DisplayImageUrl"
+									 alt="Vendor Image"
+									 style="width:80px; height:70px; object-fit:cover;" />
+							</td>
+							<td>@item.Vendor.StoreName</td>
+							<td>@item.AppUserEmail</td>
+							<td>@item.AppUserLockoutStatus</td>
+							<td>@item.Vendor.CreatedAt.ToString("yyyy-MM-dd")</td>
+							<td>
+								<a asp-area="Admin" asp-controller="Vendor"
+								   asp-action="GetVendor" asp-route-id="@item.Vendor.Id"
+								   asp-route-searchString="@Model.SearchString"
+								   asp-route-lockoutStatus="@Model.LockoutStatus"
+								   asp-route-currentSort="@Model.CurrentSort"
+								   asp-route-currentPage="@Model.CurrentPage"
+								   class="btn btn-sm btn-info me-1">
+									<i class="bi bi-eye"></i> Details
+								</a>
+								<form asp-area="Admin" asp-controller="Vendor" asp-action="ToggleVendorLock" method="post" class="d-inline">
+									<input type="hidden" name="Vendor.id" value="@item.Vendor.Id" />
+									<input type="hidden" name="sourceView" value="@Model.SourceView" />
+									<input type="hidden" name="searchString" value="@Model.SearchString" />
+									<input type="hidden" name="lockoutStatus" value="@Model.LockoutStatus" />
+									<input type="hidden" name="currentSort" value="@Model.CurrentSort" />
+									<input type="hidden" name="currentPage" value="@Model.CurrentPage" />
+
+									@if (item.AppUserLockoutStatus == "Locked")
+									{
+										<button type="submit" class="btn btn-sm btn-success">
+											<i class="bi bi-unlock-fill"></i> Unlock
+										</button>
+									}
+									else
+									{
+										<button type="submit" class="btn btn-sm btn-secondary">
+											<i class="bi bi-lock-fill"></i> Lock
+										</button>
+									}
+								</form>
+								<a asp-area="Admin" asp-controller="Vendor"
+								   asp-action="ResetVendorPassword" asp-route-id="@item.Vendor.Id"
+								   asp-route-sourceView="@Model.SourceView"
+								   asp-route-searchString="@Model.SearchString"
+								   asp-route-lockoutStatus="@Model.LockoutStatus"
+								   asp-route-currentSort="@Model.CurrentSort"
+								   asp-route-currentPage="@Model.CurrentPage"
+								   class="btn btn-sm btn-primary me-1">
+									<i class="bi bi-key"></i> Reset Password
+								</a>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+
+		<nav aria-label="Page navigation">
+			<ul class="pagination justify-content-between">
+				@if (Model.CurrentPage > 1)
+				{
+					<li class="page-item">
+						<a asp-area="Admin" asp-controller="Vendor" asp-action="GetAllVendors"
+						   asp-route-currentPage="@(Model.CurrentPage - 1)"
+						   asp-route-searchString="@Model.SearchString"
+						   asp-route-lockoutStatus="@Model.LockoutStatus"
+						   asp-route-currentSort="@Model.CurrentSort"
+						   class="page-link">
+							Previous
+						</a>
+					</li>
+				}
+				else
+				{
+					<li class="page-item disabled">
+						<span class="page-link">Previous</span>
+					</li>
+				}
+
+				<li class="page-item flex-grow-1 d-flex justify-content-center">
+					<ul class="pagination mb-0">
+						@for (int i = 1; i <= Model.TotalPages; i++)
+						{
+							<li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+								<a asp-area="Admin" asp-controller="Vendor"
+								   asp-action="GetAllVendors"
+								   asp-route-currentPage="@i"
+								   asp-route-searchString="@Model.SearchString"
+								   asp-route-lockoutStatus="@Model.LockoutStatus"
+								   asp-route-currentSort="@Model.CurrentSort"
+								   class="page-link">
+									@i
+								</a>
+							</li>
+						}
+					</ul>
+				</li>
+
+				@if (Model.CurrentPage < Model.TotalPages)
+				{
+					<li class="page-item">
+						<a asp-area="Admin" asp-controller="Vendor" asp-action="GetAllVendors"
+						   asp-route-currentPage="@(Model.CurrentPage + 1)"
+						   asp-route-searchString="@Model.SearchString"
+						   asp-route-lockoutStatus="@Model.LockoutStatus"
+						   asp-route-currentSort="@Model.CurrentSort"
+						   class="page-link">
+							Next
+						</a>
+					</li>
+				}
+				else
+				{
+					<li class="page-item disabled">
+						<span class="page-link">Next</span>
+					</li>
+				}
+			</ul>
+		</nav>
+	}
+</div>

@@ -1,0 +1,79 @@
+﻿@model CustomerVM
+
+@{
+	ViewData["Title"] = "Delete Customer Account";
+}
+
+<div class="container mt-4">
+	<h2 class="mb-4 text-danger">
+		<i class="bi bi-exclamation-triangle-fill"></i> Delete Customer Account
+	</h2>
+
+	<div class="alert alert-danger text-center">
+		<i class="bi bi-x-circle-fill"></i>
+		<strong>Are you sure?</strong> Deleting this customer account is permanent and cannot be undone.
+	</div>
+
+	<div class="text-center mb-4">
+		<img src="@Model.DisplayImageUrl" alt="Customer Image"
+			 class="rounded-circle shadow-sm"
+			 style="width:200px; height:200px; object-fit:cover;" />
+	</div>
+
+	<div class="row mb-4">
+		<div class="col-md-8 offset-md-2">
+			<dl class="row">
+				<dt class="col-sm-4"><i class="bi bi-person"></i> Full Name</dt>
+				<dd class="col-sm-8">@Model.Customer.FullName</dd>
+
+				<dt class="col-sm-4"><i class="bi bi-envelope"></i> Email</dt>
+				<dd class="col-sm-8">@Model.AppUserEmail</dd>
+
+				<dt class="col-sm-4"><i class="bi bi-telephone"></i> Phone Number</dt>
+				<dd class="col-sm-8">@Model.Customer.PhoneNumber</dd>
+
+				<dt class="col-sm-4"><i class="bi bi-geo-alt"></i> Address</dt>
+				<dd class="col-sm-8">@Model.Customer.Address</dd>
+
+				<dt class="col-sm-4"><i class="bi bi-gender-ambiguous"></i> Gender</dt>
+				<dd class="col-sm-8">@Model.Customer.Gender</dd>
+
+				<dt class="col-sm-4"><i class="bi bi-calendar"></i> Date of Birth</dt>
+				<dd class="col-sm-8">@Model.Customer.DateOfBirth.ToString("yyyy-MM-dd")</dd>
+
+				<dt class="col-sm-4"><i class="bi bi-lock"></i> Lockout Status</dt>
+				<dd class="col-sm-8">@Model.AppUserLockoutStatus</dd>
+
+				<dt class="col-sm-4"><i class="bi bi-clock-history"></i> Account Created On</dt>
+				<dd class="col-sm-8">@Model.Customer.CreatedAt.ToString("yyyy-MM-dd HH:mm")</dd>
+			</dl>
+		</div>
+	</div>
+
+	<form asp-area="Admin" asp-controller="Customer" asp-action="DeleteCustomer"
+		  method="post" class="d-flex justify-content-end gap-2">
+		@Html.AntiForgeryToken()
+
+		<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+		<input asp-for="Customer.Id" type="hidden" />
+		<input asp-for="SearchString" type="hidden" />
+		<input asp-for="LockoutStatus" type="hidden" />
+		<input asp-for="CurrentSort" type="hidden" />
+		<input asp-for="CurrentPage" type="hidden" />
+
+		<button type="submit" class="btn btn-danger">
+			<i class="bi bi-trash-fill"></i> Confirm Delete
+		</button>
+		<a asp-area="Admin" asp-controller="Customer" asp-action="GetCustomer"
+		   asp-route-id="@Model.Customer.Id"
+		   asp-route-searchString="@Model.SearchString"
+		   asp-route-lockoutStatus="@Model.LockoutStatus"
+		   asp-route-currentSort="@Model.CurrentSort"
+		   asp-route-currentPage="@Model.CurrentPage"
+		   class="btn btn-secondary">
+			<i class="bi bi-arrow-left-circle"></i> Cancel
+		</a>
+	</form>
+</div>
+

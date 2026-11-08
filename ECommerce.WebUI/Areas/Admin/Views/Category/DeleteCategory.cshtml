@@ -1,0 +1,66 @@
+﻿@model CategoryVM
+
+@{
+    ViewData["Title"] = "Delete Category";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-danger">
+        <i class="bi bi-exclamation-triangle-fill"></i> Delete Category
+    </h2>
+
+    <!-- Warning Alert -->
+    <div class="alert alert-danger text-center">
+        <i class="bi bi-x-circle-fill"></i>
+        <strong>Are you sure?</strong> Deleting this category is permanent and cannot be undone.
+    </div>
+
+    <!-- Category Image Banner -->
+    <div class="mb-4">
+        <img src="@Model.DisplayImageUrl" alt="Category Image"
+             class="img-fluid shadow-sm"
+             style="max-height:250px; width:100%; object-fit:cover;" />
+    </div>
+
+    <!-- Category Details -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3"><i class="bi bi-tags"></i> Name</dt>
+                <dd class="col-sm-9">@Model.Category.Name</dd>
+
+                <dt class="col-sm-3"><i class="bi bi-card-text"></i> Description</dt>
+                <dd class="col-sm-9">@Model.Category.Description</dd>
+
+                <dt class="col-sm-3"><i class="bi bi-clock-history"></i> Created On</dt>
+                <dd class="col-sm-9">@Model.Category.CreatedAt.ToString("yyyy-MM-dd HH:mm")</dd>
+            </dl>
+        </div>
+    </div>
+
+    <!-- Delete Form -->
+    <form asp-area="Admin" asp-controller="Category" asp-action="DeleteCategory"
+          method="post" class="d-flex justify-content-end gap-2">
+        @Html.AntiForgeryToken()
+
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <input asp-for="Category.Id" type="hidden" />
+
+        <input asp-for="SearchString" type="hidden" />
+        <input asp-for="CurrentSort" type="hidden" />
+        <input asp-for="CurrentPage" type="hidden" />
+
+        <button type="submit" class="btn btn-danger">
+            <i class="bi bi-trash-fill"></i> Confirm Delete
+        </button>
+        <a asp-area="Admin" asp-controller="Category" asp-action="@Model.SourceView"
+           asp-route-id="@Model.Category.Id"
+           asp-route-searchString="@Model.SearchString"
+           asp-route-currentSort="@Model.CurrentSort"
+           asp-route-currentPage="@Model.CurrentPage"
+           class="btn btn-secondary">
+            <i class="bi bi-arrow-left-circle"></i> Cancel
+        </a>
+    </form>
+</div>
