@@ -1,12 +1,149 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>
-        Learn about <a href="https://learn.microsoft.com/aspnet/core">
-            building Web apps with ASP.NET Core
-        </a>.
-    </p>
+<div class="container">
+
+    <!-- Hero Section -->
+
+    <div class="text-center py-5">
+
+        <i class="bi bi-cart4 text-warning" style="font-size:100px;"></i>
+
+        <h1 class="display-4 fw-bold mt-3">
+            Welcome To CommerceHub
+        </h1>
+
+        <p class="lead text-muted mt-3">
+            Your marketplace for buying, selling, and discovering products.
+        </p>
+
+        <div class="mt-4">
+
+            <a asp-area="Customer"
+               asp-controller="Shop"
+               asp-action="GetAllProducts"
+               class="btn btn-dark btn-lg me-2">
+
+                <i class="bi bi-shop"></i>
+                Shop Now
+
+            </a>
+
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <a asp-area="Identity"
+                   asp-controller="Account"
+                   asp-action="ChooseRole"
+                   class="btn btn-outline-dark btn-lg">
+
+                    <i class="bi bi-person-plus"></i>
+                    Join Us
+
+                </a>
+            }
+
+        </div>
+
+    </div>
+
+    <!-- Features -->
+
+    <div class="row g-4 mt-3">
+
+        <div class="col-md-4">
+
+            <div class="card shadow border-0 text-center h-100">
+
+                <div class="card-body p-5">
+
+                    <i class="bi bi-box-seam display-3 text-primary"></i>
+
+                    <h4 class="mt-3">
+                        Products
+                    </h4>
+
+                    <p class="text-muted">
+                        Browse products from trusted vendors.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card shadow border-0 text-center h-100">
+
+                <div class="card-body p-5">
+
+                    <i class="bi bi-shop display-3 text-warning"></i>
+
+                    <h4 class="mt-3">
+                        Vendors
+                    </h4>
+
+                    <p class="text-muted">
+                        Connect with sellers and discover great deals.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card shadow border-0 text-center h-100">
+
+                <div class="card-body p-5">
+
+                    <i class="bi bi-shield-check display-3 text-success"></i>
+
+                    <h4 class="mt-3">
+                        Secure Shopping
+                    </h4>
+
+                    <p class="text-muted">
+                        Safe and reliable shopping experience.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Call To Action -->
+
+    <div class="card shadow border-0 mt-5">
+
+        <div class="card-body text-center p-5">
+
+            <h3>
+                Start Exploring CommerceHub Today
+            </h3>
+
+            <p class="text-muted">
+                Discover products, connect with vendors, and enjoy a simple shopping experience.
+            </p>
+
+            <a asp-area="Customer"
+               asp-controller="Shop"
+               asp-action="GetAllProducts"
+               class="btn btn-warning">
+
+                Explore Marketplace
+
+            </a>
+
+        </div>
+
+    </div>
+
 </div>

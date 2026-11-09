@@ -30,7 +30,7 @@ namespace ECommerce.WebUI.Areas.Customer.Controllers
             [FromQuery] string currentSort = "",
             [FromQuery] int currentPage = 1)
         {
-            int pageSize = 6;
+            int pageSize = 9;
             var (products, totalItems) =
                 await _unitOfWork.Product.GetFilteredProductsAsync(
                 null, searchString, categoryId, currentSort, currentPage, pageSize);

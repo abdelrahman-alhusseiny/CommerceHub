@@ -1,2 +1,86 @@
-﻿
-<h2>Dashboard</h2>
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container-fluid">
+
+    <div class="text-center mb-5">
+
+        <h1 class="display-5 fw-bold">
+            <i class="bi bi-shop"></i>
+            Vendor Dashboard
+        </h1>
+
+        <p class="text-muted">
+            Manage your vendor account and products from one place.
+        </p>
+
+    </div>
+
+    <div class="row g-4 justify-content-center">
+
+        <!-- Profile -->
+
+        <div class="col-md-4">
+
+            <a asp-area="Vendor"
+               asp-controller="Profile"
+               asp-action="GetProfile"
+               class="text-decoration-none">
+
+                <div class="card shadow-lg border-0 h-100 text-center dashboard-card">
+
+                    <div class="card-body">
+
+                        <i class="bi bi-person-circle display-1 text-primary"></i>
+
+                        <h3 class="mt-3">
+                            Profile
+                        </h3>
+
+                        <p class="text-muted">
+                            View and manage your account information.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+        <!-- Products -->
+
+        <div class="col-md-4">
+
+            <a asp-area="Vendor"
+               asp-controller="Product"
+               asp-action="GetAllProducts"
+               class="text-decoration-none">
+
+                <div class="card shadow-lg border-0 h-100 text-center dashboard-card">
+
+                    <div class="card-body">
+
+                        <i class="bi bi-box-seam display-1 text-success"></i>
+
+                        <h3 class="mt-3">
+                            Products
+                        </h3>
+
+                        <p class="text-muted">
+                            Manage your products and inventory.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
